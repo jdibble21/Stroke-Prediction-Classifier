@@ -49,11 +49,27 @@ def predict_using_probability(gender,age,hp,hd,marry,work,residence,gluc_lvl,bmi
 
 def determine_probability_risk(prob):
     pass
-
+def output_sample_case_data(num,s,p):
+    frmt = "will not"
+    if(p == "yes"):
+        frmt = " will"
+    hp = "no"
+    if(s.loc['hypertension'] == 1):
+        hp = ""
+    print("Patient number",num,": Age",s.loc['age'],s.loc['gender'],"with",hp,"hypertension and who",s.loc['smoking_status'])
+    print("Prediction:",p,"patient",num,frmt,"have a stroke")
+    print("\n")
+    
 def predict_sample_use_cases(df):
     case_one = df.loc[34120]
     case_two = df.loc[72911]
     case_three = df.loc[20980]
+    predict_one = predict_using_decision_tree(case_one.loc['gender'],case_one.loc['age'],case_one.loc['hypertension'],case_one.loc['smoking_status'])
+    predict_two = predict_using_decision_tree(case_two.loc['gender'],case_two.loc['age'],case_two.loc['hypertension'],case_two.loc['smoking_status'])
+    predict_three = predict_using_decision_tree(case_three.loc['gender'],case_three.loc['age'],case_three.loc['hypertension'],case_three.loc['smoking_status'])
+    output_sample_case_data(1,case_one,predict_one)
+    output_sample_case_data(2,case_two,predict_two)
+    output_sample_case_data(3,case_three,predict_three)
 
     
 def main():
@@ -62,6 +78,8 @@ def main():
     ex = csv_data.loc[34120]
     predict = predict_using_decision_tree(ex.loc['gender'],ex.loc['age'],ex.loc['hypertension'],ex.loc['smoking_status'])
     ids = csv_data.index
+    print("\n")
+    predict_sample_use_cases(csv_data)
     #print(ids[0]) save for later: loop through all ids in dataframe
     #print(ex)
     #print(predict)
