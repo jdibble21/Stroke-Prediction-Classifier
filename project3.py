@@ -49,21 +49,27 @@ def predict_using_probability(gender,age,hp,hd,marry,work,residence,gluc_lvl,bmi
 
 def determine_probability_risk(prob):
     pass
+
 def output_sample_case_data(num,s,p):
+    smk_status = ""
+    if(s.loc['smoking_status'] == "Unknown"):
+        smk_status = "unknown smoking status"
+    else:
+        smk_status = "who "+str(s.loc['smoking_status'])
     frmt = "will not"
     if(p == "yes"):
         frmt = " will"
     hp = "no"
     if(s.loc['hypertension'] == 1):
         hp = ""
-    print("Patient number",num,": Age",s.loc['age'],s.loc['gender'],"with",hp,"hypertension and who",s.loc['smoking_status'])
-    print("Prediction:",p,"patient",num,frmt,"have a stroke")
+    print("Patient number",num,": Age",s.loc['age'],s.loc['gender'],"with",hp,"hypertension and",smk_status)
+    print("Prediction: "+str(p)+", patient "+str(num)+" "+str(frmt)+" have a stroke")
     print("\n")
     
 def predict_sample_use_cases(df):
-    case_one = df.loc[34120]
+    case_one = df.loc[4219]
     case_two = df.loc[72911]
-    case_three = df.loc[20980]
+    case_three = df.loc[27419]
     predict_one = predict_using_decision_tree(case_one.loc['gender'],case_one.loc['age'],case_one.loc['hypertension'],case_one.loc['smoking_status'])
     predict_two = predict_using_decision_tree(case_two.loc['gender'],case_two.loc['age'],case_two.loc['hypertension'],case_two.loc['smoking_status'])
     predict_three = predict_using_decision_tree(case_three.loc['gender'],case_three.loc['age'],case_three.loc['hypertension'],case_three.loc['smoking_status'])
