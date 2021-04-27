@@ -51,8 +51,7 @@ def determine_probability_risk(prob):
     pass
 
 def main():
-    csv_data = pd.read_csv('data.csv')
-    csv_data.set_index('id')
+    csv_data = pd.read_csv('data.csv',index_col ="id")
     csv_data.head()
     print(csv_data)
 
