@@ -6,7 +6,7 @@ PROBABILITY_CUTOFF = 0.70
 FACTOR_IMPACT_LARGE = 0.15
 FACTOR_IMPACT_SMALL = 0.04
 
-def predict_using_descision_tree(gender,age,hp,smoke):
+def predict_using_decision_tree(gender,age,hp,smoke):
     if(smoke == "smokes"):
         if(age >= 55 or gender == "Male"):
             return "yes"
@@ -50,10 +50,21 @@ def predict_using_probability(gender,age,hp,hd,marry,work,residence,gluc_lvl,bmi
 def determine_probability_risk(prob):
     pass
 
+def predict_sample_use_cases(df):
+    case_one = df.loc[34120]
+    case_two = df.loc[72911]
+    case_three = df.loc[20980]
+
+    
 def main():
     csv_data = pd.read_csv('data.csv',index_col ="id")
     csv_data.head()
-    print(csv_data)
+    ex = csv_data.loc[34120]
+    predict = predict_using_decision_tree(ex.loc['gender'],ex.loc['age'],ex.loc['hypertension'],ex.loc['smoking_status'])
+    ids = csv_data.index
+    #print(ids[0]) save for later: loop through all ids in dataframe
+    #print(ex)
+    #print(predict)
 
 if __name__ == "__main__":
     main()
