@@ -6,23 +6,35 @@ PROBABILITY_CUTOFF = 0.70
 FACTOR_IMPACT_LARGE = 0.15
 FACTOR_IMPACT_SMALL = 0.04
 
-def predict_using_decision_tree(gender,age,hp,smoke):
+def predict_using_decision_tree(age,hp,smoke):
     if(smoke == "smokes"):
-        if(age >= 55 or gender == "Male"):
+        if(age >= 55):
             return "yes"
+        elif(age < 55):
+            return "no"
         if(hp == 1):
             return "yes"
-        return "no"
+        else:
+            return "no"
     if(smoke == "formally smoked"):
         if(age >= 65):
             return "yes"
+        elif(age < 65):
+            return "no"
         if(hp == 1):
-            return "yes"    
+            return "yes" 
+        else:
+            return "no"   
     if(smoke == "never smoked"):
         if(hp == 1):
             return "yes"
-        return "no"
-    return "no"
+        else:
+            return "no"
+    if(smoke == "Unknown"):
+        if(hp == 1):
+            return "yes"
+        else:
+            return "no"
     
 def predict_using_probability(gender,age,hp,hd,marry,work,residence,gluc_lvl,bmi,smoke):
     probability = 0.20
