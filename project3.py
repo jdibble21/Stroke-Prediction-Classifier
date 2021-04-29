@@ -3,10 +3,11 @@ pd.set_option('display.max_rows', None)
 import numpy as np
 
 PROBABILITY_CUTOFF = 0.70
-FACTOR_IMPACT_LARGE = 0.15
+FACTOR_IMPACT_LARGE = 0.18
+FACTOR_IMPACT_MEDIUM = 0.10
 FACTOR_IMPACT_SMALL = 0.04
 
-def predict_using_decision_tree(age,hp,smoke):
+def predict_using_decision_tree(gender,age,hp,smoke):
     if(smoke == "smokes"):
         if(age >= 55):
             return "yes"
@@ -38,46 +39,32 @@ def predict_using_decision_tree(age,hp,smoke):
     
 def predict_using_probability(gender,age,hp,hd,marry,work,residence,gluc_lvl,bmi,smoke):
     probability = 0.20
-    if(gender == "male"):
-        probability += 0.10
-        if(age > 55):
-            probability += FACTOR_IMPACT_LARGE
-        if(hp == 1):
-            probability += FACTOR_IMPACT_LARGE
-        if(hd == 1):
-            probability += FACTOR_IMPACT_LARGE
-        if(marry == "No"):
-            probability += FACTOR_IMPACT_SMALL
-        if(residence == "Rural"):
-            probability += FACTOR_IMPACT_SMALL
-        if(gluc_lvl >150):
-            probability += FACTOR_IMPACT_LARGE
-        if(bmi > 25.0):
-            probability += FACTOR_IMPACT_LARGE
-        if(smoke > "smokes"):
-            probability += FACTOR_IMPACT_LARGE
-    elif(gender == "Female"):
+    
+    if(age > 55):
+        probability += FACTOR_IMPACT_LARGE
+    if(hp == 1):
+        probability += FACTOR_IMPACT_LARGE
+    if(hd == 1):
+        probability += FACTOR_IMPACT_LARGE
+    if(marry == "No"):
+        probability += FACTOR_IMPACT_SMALL
+    if(residence == "Rural"):
+        probability += FACTOR_IMPACT_SMALL
+    elif(residence == "Urban"):
         pass
+    if(gluc_lvl >200):
+        probability += FACTOR_IMPACT_LARGE
+    elif(gluc_lvl <= 199 and gluc_lvl >= 150):
+        probability += FACTOR_IMPACT_MEDIUM
+    if(bmi > 25.0):
+        probability += FACTOR_IMPACT_LARGE
+    if(smoke > "smokes"):
+        probability += FACTOR_IMPACT_LARGE
+    return probability
 
 def determine_probability_risk(prob):
     pass
 
-def output_sample_case_data(num,s,p):
-    smk_status = ""
-    if(s.loc['smoking_status'] == "Unknown"):
-        smk_status = "unknown smoking status"
-    else:
-        smk_status = "who "+str(s.loc['smoking_status'])
-    frmt = "will not"
-    if(p == "yes"):
-        frmt = " will"
-    hp = "no"
-    if(s.loc['hypertension'] == 1):
-        hp = ""
-    print("Patient number",num,": Age",s.loc['age'],s.loc['gender'],"with",hp,"hypertension and",smk_status)
-    print("Prediction: "+str(p)+", patient "+str(num)+" "+str(frmt)+" have a stroke")
-    print("\n")
-    
 def predict_sample_use_cases(df):
     case_one = df.loc[4219]
     case_two = df.loc[72911]
@@ -96,8 +83,8 @@ def main():
     ex = csv_data.loc[34120]
     predict = predict_using_decision_tree(ex.loc['gender'],ex.loc['age'],ex.loc['hypertension'],ex.loc['smoking_status'])
     ids = csv_data.index
+    print(csv_data.describe())
     print("\n")
-    predict_sample_use_cases(csv_data)
     #print(ids[0]) save for later: loop through all ids in dataframe
     #print(ex)
     #print(predict)
