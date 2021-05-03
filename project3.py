@@ -52,6 +52,10 @@ def determine_probability_risk(p):
         return "Yes"
 
 
+def run_testing(id_array, df):
+    print(len(id_array))
+
+
 def main():
     csv_data = pd.read_csv('data.csv', index_col="id")
     csv_data.head()
@@ -61,10 +65,7 @@ def main():
                                       ex1.loc['heart_disease'], ex1.loc['ever_married'], ex1.loc['work_type'],
                                       ex1.loc['Residence_type'], ex1.loc['avg_glucose_level'], ex1.loc['bmi'],
                                       ex1.loc['smoking_status'])
-    print(ex1)
-    print("\n")
-    print(pred1)
-    print(determine_probability_risk(pred1))
+    run_testing(ids, csv_data)
     # print(ids[0]) save for later: loop through all ids in dataframe
     # print(ex)
     # print(predict)
