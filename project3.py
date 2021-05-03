@@ -4,10 +4,10 @@ import numpy as np
 
 pd.set_option('display.max_rows', None)
 
-PROBABILITY_CUTOFF = 0.70
-FACTOR_IMPACT_LARGE = 0.18
-FACTOR_IMPACT_MEDIUM = 0.10
-FACTOR_IMPACT_SMALL = 0.04
+PROBABILITY_CUTOFF = 0.50
+FACTOR_IMPACT_LARGE = 0.35
+FACTOR_IMPACT_MEDIUM = 0.25
+FACTOR_IMPACT_SMALL = 0.09
 K_SPLIT = 4
 
 
@@ -35,9 +35,9 @@ def predict_using_probability(gender, age, hp, hd, marry, work, residence, gluc_
         probability += FACTOR_IMPACT_MEDIUM
     if bmi > 28.0:
         probability += FACTOR_IMPACT_LARGE
-    elif 28.0 >= bmi > 25:
+    elif 28.0 >= bmi >= 25.0:
         probability += FACTOR_IMPACT_MEDIUM
-    elif bmi < 25:
+    elif bmi < 25.0:
         probability -= FACTOR_IMPACT_LARGE
     if smoke == "smokes":
         probability += FACTOR_IMPACT_LARGE
@@ -67,9 +67,12 @@ def run_testing(id_array, df):
         for j in range(0, len(k_group)):
             current_entry = df.loc[k_group[j]]
             accurate_predictions += test_k_sample(current_entry)
-            run_totals.append(accurate_predictions/len(k_group))
+            run_totals.append(accurate_predictions / len(k_group))
     # Calculate total accuracy
-    print("Accuracy:",)
+    accuracy = (sum(run_totals) / len(run_totals)) * 100
+    format_accuracy = "{:.3f}".format(accuracy)
+    print("Accuracy:", str(format_accuracy + "%"))
+
 
 def test_k_sample(x):
     k_prediction = predict_using_probability(x.loc['gender'], x.loc['age'], x.loc['hypertension'],
@@ -77,9 +80,12 @@ def test_k_sample(x):
                                              x.loc['Residence_type'], x.loc['avg_glucose_level'], x.loc['bmi'],
                                              x.loc['smoking_status'])
     if k_prediction == x.loc['stroke']:
+        print("STROKE")
         return 1
     else:
+        print("NO STROKE")
         return 0
+
 
 def main():
     csv_data = pd.read_csv('data.csv', index_col="id")
