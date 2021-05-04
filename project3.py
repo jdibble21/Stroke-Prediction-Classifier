@@ -6,10 +6,10 @@ pd.set_option('display.max_rows', None)
 
 PROBABILITY_CUTOFF = 0.50
 FACTOR_IMPACT_LARGE = 0.35
-FACTOR_IMPACT_MEDIUM = 0.25
-FACTOR_IMPACT_SMALL = 0.09
-BMI_UPPER_BOUND = 28.0
-BMI_LOWER_BOUND = 20.75
+FACTOR_IMPACT_MEDIUM = 0.28
+FACTOR_IMPACT_SMALL = 0.08
+BMI_UPPER_BOUND = 27.0
+BMI_LOWER_BOUND = 21.75
 GLUCOSE_LVL_UPPER_BOUND = 200.0
 GLUCOSE_LVL_LOWER_BOUND = 130.0
 K_SPLIT = 4
@@ -18,7 +18,7 @@ K_SPLIT = 4
 def predict_using_probability(gender, age, hp, hd, marry, work, residence, gluc_lvl, bmi, smoke):
     probability = 0
     if gender == "Male":
-        probability += FACTOR_IMPACT_SMALL
+        probability += FACTOR_IMPACT_MEDIUM
     if age > 55:
         probability += FACTOR_IMPACT_MEDIUM
     if hp == 1:
