@@ -8,6 +8,10 @@ PROBABILITY_CUTOFF = 0.50
 FACTOR_IMPACT_LARGE = 0.35
 FACTOR_IMPACT_MEDIUM = 0.25
 FACTOR_IMPACT_SMALL = 0.09
+BMI_UPPER_BOUND = 28.0
+BMI_LOWER_BOUND = 20.75
+GLUCOSE_LVL_UPPER_BOUND = 200.0
+GLUCOSE_LVL_LOWER_BOUND = 130.0
 K_SPLIT = 4
 
 
@@ -29,15 +33,17 @@ def predict_using_probability(gender, age, hp, hd, marry, work, residence, gluc_
         probability += FACTOR_IMPACT_SMALL
     elif residence == "Urban":
         pass
-    if gluc_lvl > 200:
+    if gluc_lvl > GLUCOSE_LVL_UPPER_BOUND:
         probability += FACTOR_IMPACT_LARGE
-    elif 199 >= gluc_lvl >= 150:
+    elif GLUCOSE_LVL_UPPER_BOUND >= gluc_lvl >= GLUCOSE_LVL_LOWER_BOUND:
         probability += FACTOR_IMPACT_MEDIUM
-    if bmi > 28.0:
+    elif gluc_lvl < GLUCOSE_LVL_LOWER_BOUND:
+        probability -= FACTOR_IMPACT_SMALL
+    if bmi > BMI_UPPER_BOUND:
         probability += FACTOR_IMPACT_LARGE
-    elif 28.0 >= bmi >= 25.0:
+    elif BMI_UPPER_BOUND >= bmi >= BMI_LOWER_BOUND:
         probability += FACTOR_IMPACT_MEDIUM
-    elif bmi < 25.0:
+    elif bmi < BMI_LOWER_BOUND:
         probability -= FACTOR_IMPACT_LARGE
     if smoke == "smokes":
         probability += FACTOR_IMPACT_LARGE
@@ -91,7 +97,6 @@ def main():
     csv_data = pd.read_csv('data.csv', index_col="id")
     csv_data.head()
     ids = csv_data.index
-    ex1 = csv_data.loc[12175]
     run_testing(ids, csv_data)
 
 
