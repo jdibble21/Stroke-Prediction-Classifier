@@ -3,54 +3,61 @@ import random
 import numpy as np
 
 pd.set_option('display.max_rows', None)
-
+strokes = 0
 PROBABILITY_CUTOFF = 0.50
-FACTOR_IMPACT_LARGE = 0.35
-FACTOR_IMPACT_MEDIUM = 0.28
-FACTOR_IMPACT_SMALL = 0.08
+FACTOR_IMPACT_LARGE = 0.37
+FACTOR_IMPACT_MEDIUM = 0.25
+FACTOR_IMPACT_SMALL = 0.10
 BMI_UPPER_BOUND = 27.0
 BMI_LOWER_BOUND = 21.75
 GLUCOSE_LVL_UPPER_BOUND = 200.0
+GLUCOSE_IMPACT_LARGE = 0.80
 GLUCOSE_LVL_LOWER_BOUND = 130.0
 K_SPLIT = 4
 
 
 def predict_using_probability(gender, age, hp, hd, marry, work, residence, gluc_lvl, bmi, smoke):
-    probability = 0
+    probability = 0.10
     if gender == "Male":
         probability += FACTOR_IMPACT_MEDIUM
-    if age > 55:
-        probability += FACTOR_IMPACT_MEDIUM
+    if 70 > age > 55:
+        probability += FACTOR_IMPACT_SMALL
+    if 55 >= age > 40:
+        probability -= FACTOR_IMPACT_SMALL
+    if 40 >= age > 20:
+        probability -= FACTOR_IMPACT_MEDIUM
+    if age <= 20:
+        probability -= FACTOR_IMPACT_LARGE
     if hp == 1:
-        probability += FACTOR_IMPACT_LARGE
+        probability += FACTOR_IMPACT_MEDIUM
     if hd == 1:
-        probability += FACTOR_IMPACT_LARGE
+        probability += FACTOR_IMPACT_MEDIUM
     if hd == 1 and hp == 0:
         probability -= FACTOR_IMPACT_LARGE
     if marry == "No":
         probability += FACTOR_IMPACT_SMALL
     if residence == "Rural":
         probability += FACTOR_IMPACT_SMALL
-    elif residence == "Urban":
+    if residence == "Urban":
         pass
     if gluc_lvl > GLUCOSE_LVL_UPPER_BOUND:
-        probability += FACTOR_IMPACT_LARGE
-    elif GLUCOSE_LVL_UPPER_BOUND >= gluc_lvl >= GLUCOSE_LVL_LOWER_BOUND:
+        probability += GLUCOSE_IMPACT_LARGE
+    if GLUCOSE_LVL_UPPER_BOUND >= gluc_lvl >= GLUCOSE_LVL_LOWER_BOUND:
         probability += FACTOR_IMPACT_MEDIUM
-    elif gluc_lvl < GLUCOSE_LVL_LOWER_BOUND:
+    if gluc_lvl < GLUCOSE_LVL_LOWER_BOUND:
         probability -= FACTOR_IMPACT_SMALL
     if bmi > BMI_UPPER_BOUND:
         probability += FACTOR_IMPACT_LARGE
-    elif BMI_UPPER_BOUND >= bmi >= BMI_LOWER_BOUND:
+    if BMI_UPPER_BOUND >= bmi >= BMI_LOWER_BOUND:
         probability += FACTOR_IMPACT_MEDIUM
-    elif bmi < BMI_LOWER_BOUND:
+    if bmi < BMI_LOWER_BOUND:
         probability -= FACTOR_IMPACT_LARGE
+    if bmi == "N/A":
+        probability += FACTOR_IMPACT_LARGE
     if smoke == "smokes":
         probability += FACTOR_IMPACT_LARGE
-    elif smoke == "formally smoked":
+    if smoke == "formally smoked":
         probability += FACTOR_IMPACT_MEDIUM
-    elif smoke == "Unknown":
-        probability += FACTOR_IMPACT_SMALL
     return determine_probability_risk(probability)
 
 
@@ -86,10 +93,8 @@ def test_k_sample(x):
                                              x.loc['Residence_type'], x.loc['avg_glucose_level'], x.loc['bmi'],
                                              x.loc['smoking_status'])
     if k_prediction == x.loc['stroke']:
-        print("STROKE")
         return 1
     else:
-        print("NO STROKE")
         return 0
 
 
