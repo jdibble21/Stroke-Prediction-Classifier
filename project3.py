@@ -1,20 +1,20 @@
 import pandas as pd
-import random
 import numpy as np
 
 pd.set_option('display.max_rows', None)
-strokes = 0
 PROBABILITY_CUTOFF = 0.50
 FACTOR_IMPACT_LARGE = 0.37
 FACTOR_IMPACT_MEDIUM = 0.25
 FACTOR_IMPACT_SMALL = 0.10
 BMI_UPPER_BOUND = 27.0
 BMI_LOWER_BOUND = 21.75
-GLUCOSE_LVL_UPPER_BOUND = 200.0
+GLUCOSE_LVL_UPPER_BOUND = 210.0
 GLUCOSE_IMPACT_LARGE = 0.80
-GLUCOSE_LVL_LOWER_BOUND = 130.0
+GLUCOSE_LVL_LOWER_BOUND = 125.0
 K_SPLIT = 4
 
+
+# Best accuracy: 38.932% for 96 labels
 
 def predict_using_probability(gender, age, hp, hd, marry, work, residence, gluc_lvl, bmi, smoke):
     probability = 0.10
@@ -84,7 +84,8 @@ def run_testing(id_array, df):
     # Calculate total accuracy
     accuracy = (sum(run_totals) / len(run_totals)) * 100
     format_accuracy = "{:.3f}".format(accuracy)
-    print("Accuracy:", str(format_accuracy + "%"))
+    print("Classifier Accuracy:", str(format_accuracy + "%"))
+    print("Predicted", len(id_array), "labels")
 
 
 def test_k_sample(x):
