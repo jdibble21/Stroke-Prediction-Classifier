@@ -41,7 +41,8 @@ class StrokeDTClassifier:
         print("Predicted", len(id_array), "labels")
 
     def test_accuracy(self):
-        pass
+        ids = self.dataframe.index
+        self.run_testing(ids, self.dataframe)
 
     def test_k_sample(self, x):
         k_prediction = self.predict_using_probability(x.loc['gender'], x.loc['age'], x.loc['hypertension'],
